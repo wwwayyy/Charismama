@@ -4,6 +4,10 @@ import os
 import shutil
 import stat
 
+# FORCE DISABLE AUTO-UPDATE FOR RAILWAY
+os.environ['NO_UPDATE'] = '1'
+os.environ['SKIP_UPDATE'] = 'true'
+
 # Python version check
 MIN_PYTHON = (3, 11)
 print(f"Bot running Python {sys.version_info.major}.{sys.version_info.minor}.{sys.version_info.micro}")
@@ -1017,13 +1021,14 @@ if __name__ == "__main__":
     import asyncio
     from datetime import datetime
             
-    # Handle update/repair logic
-    if "--repair" in sys.argv:
-        asyncio.run(check_and_update_files())
-    elif "--no-update" in sys.argv:
-        print(F.YELLOW + "Update check skipped due to --no-update flag." + R)
-    else:
-        asyncio.run(check_and_update_files())
+    # Handle update/repair logic - DISABLED FOR RAILWAY
+    print(F.YELLOW + "Auto-update disabled for Railway" + R)
+    # if "--repair" in sys.argv:
+    #     asyncio.run(check_and_update_files())
+    # elif "--no-update" in sys.argv:
+    #     print(F.YELLOW + "Update check skipped due to --no-update flag." + R)
+    # else:
+    #     asyncio.run(check_and_update_files())
             
     import discord
     from discord.ext import commands
