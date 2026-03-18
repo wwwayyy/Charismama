@@ -1050,18 +1050,35 @@ if __name__ == "__main__":
 
     init(autoreset=True)
 
+    # ===== FIXED TOKEN HANDLING FOR RAILWAY =====
     token_file = "bot_token.txt"
-    if not os.path.exists(token_file):
-        bot_token = input("Enter the bot token: ")
+    
+    # First try to get token from environment variable (Railway)
+    bot_token = os.getenv('BOT_TOKEN')
+    
+    if bot_token:
+        print("✓ Found BOT_TOKEN in environment variables")
+        # Save to file for future runs
         with open(token_file, "w") as f:
             f.write(bot_token)
     else:
-        with open(token_file, "r") as f:
-            bot_token = f.read().strip()
+        # Fall back to token file
+        print("BOT_TOKEN not found in environment, checking token file...")
+        if os.path.exists(token_file):
+            with open(token_file, "r") as f:
+                bot_token = f.read().strip()
+            print("✓ Found token in bot_token.txt")
+        else:
+            print("ERROR: No bot token found!")
+            print("Please set BOT_TOKEN environment variable in Railway")
+            sys.exit(1)
+
+    if not bot_token:
+        print("ERROR: Bot token is empty!")
+        sys.exit(1)
 
     if not os.path.exists("db"):
         os.makedirs("db")
-        
         print(F.GREEN + "db folder created" + R)
 
     databases = {
