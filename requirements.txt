@@ -12,3 +12,4 @@ onnxruntime>=1.18.1
 matplotlib>=3.10.5
 pillow>=10.4.0
 numpy>=2.4.0
+flask
