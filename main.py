@@ -1337,6 +1337,7 @@ if __name__ == "__main__":
         # ===== KEEP-ALIVE WEB SERVER FOR RENDER =====
         from flask import Flask
         import threading
+        import time
     
         app = Flask('')
     
@@ -1345,11 +1346,18 @@ if __name__ == "__main__":
             return "Bot is running!"
     
         def run_web():
-            app.run(host='0.0.0.0', port=int(os.environ.get('PORT', 8080)))
+            try:
+                # Ensure the port is an integer and default to 8080 if not set
+                port = int(os.environ.get('PORT', 8080))
+                # Bind to all network interfaces (0.0.0.0) as required by Render
+                app.run(host='0.0.0.0', port=port, use_reloader=False)
+            except Exception as e:
+                print(f"Web server failed to start: {e}")
     
-        # Start web server in background thread
-        threading.Thread(target=run_web, daemon=True).start()
-        print("✓ Web server started for keep-alive")
+        # Start web server in a background thread (not daemon, to keep it alive)
+        web_thread = threading.Thread(target=run_web, daemon=False)
+        web_thread.start()
+        print(f"✓ Web server started on port {os.environ.get('PORT', 8080)} for keep-alive")
     
         if __name__ == "__main__":
             run_bot()
