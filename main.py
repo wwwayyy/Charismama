@@ -1334,5 +1334,22 @@ if __name__ == "__main__":
         except KeyboardInterrupt:
             pass  # Already handled by signal handler
 
-    if __name__ == "__main__":
-        run_bot()
+        # ===== KEEP-ALIVE WEB SERVER FOR RENDER =====
+        from flask import Flask
+        import threading
+    
+        app = Flask('')
+    
+        @app.route('/')
+        def home():
+            return "Bot is running!"
+    
+        def run_web():
+            app.run(host='0.0.0.0', port=int(os.environ.get('PORT', 8080)))
+    
+        # Start web server in background thread
+        threading.Thread(target=run_web, daemon=True).start()
+        print("✓ Web server started for keep-alive")
+    
+        if __name__ == "__main__":
+            run_bot()
