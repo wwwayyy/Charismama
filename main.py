@@ -1338,7 +1338,9 @@ if __name__ == "__main__":
         from flask import Flask
         import threading
         import time
-    
+
+        print("Starting Flask web server setup...")
+
         app = Flask('')
     
         @app.route('/')
@@ -1347,17 +1349,24 @@ if __name__ == "__main__":
     
         def run_web():
             try:
-                # Ensure the port is an integer and default to 8080 if not set
                 port = int(os.environ.get('PORT', 8080))
-                # Bind to all network interfaces (0.0.0.0) as required by Render
+                print(f"Attempting to start web server on port {port}...")
                 app.run(host='0.0.0.0', port=port, use_reloader=False)
             except Exception as e:
                 print(f"Web server failed to start: {e}")
+                import traceback
+                traceback.print_exc()
     
-        # Start web server in a background thread (not daemon, to keep it alive)
+        # Start web server in background thread
+        print("Starting web server thread...")
         web_thread = threading.Thread(target=run_web, daemon=False)
         web_thread.start()
-        print(f"✓ Web server started on port {os.environ.get('PORT', 8080)} for keep-alive")
+        print(f"Web server thread started. Waiting for it to bind...")
+    
+        # Give the web server a moment to start
+        time.sleep(2)
+        print("Proceeding to start Discord bot...")
     
         if __name__ == "__main__":
+            print("Calling run_bot()...")
             run_bot()
