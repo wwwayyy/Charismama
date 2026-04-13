@@ -1334,6 +1334,7 @@ if __name__ == "__main__":
         except KeyboardInterrupt:
             pass  # Already handled by signal handler
 
+    if __name__ == "__main__":
         # ===== KEEP-ALIVE WEB SERVER FOR RENDER =====
         from flask import Flask
         import threading
@@ -1367,6 +1368,5 @@ if __name__ == "__main__":
         time.sleep(2)
         print("Proceeding to start Discord bot...")
     
-        if __name__ == "__main__":
-            print("Calling run_bot()...")
-            run_bot()
+        print("Calling run_bot()...")
+        run_bot()
